@@ -40,18 +40,31 @@ Player.prototype.update = function(dt) {
 
 
 Player.prototype.handleInput = function(keyCode) {
-  if (keyCode === 'left') {
-      this.x -= 100;
 
-  } else if (keyCode === 'up') {
-      this.y -= 90;
+    if (keyCode === 'left' && this.x === 0) {
+        return;
 
-  } else if (keyCode === 'right') {
-      this.x += 100;
+    } else if (keyCode === 'left') {
+        this.x -= 101;
 
-  } else if (keyCode === 'down') {
-      this.y += 90;
-  }
+    } else if (keyCode === 'up' && this.y === -40) {
+        return;
+
+    } else if (keyCode === 'up') {
+        this.y -= 88;
+
+    } else if (keyCode === 'right' && this.x === 404) {
+        return;
+
+    } else if (keyCode === 'right') {
+        this.x += 101;
+
+    } else if (keyCode === 'down' && this.y === 400) {
+        return;
+
+    } else if (keyCode === 'down') {
+        this.y += 88;
+    }
 
 };
 
