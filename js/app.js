@@ -4,7 +4,7 @@ var Enemy = function() {
     // we've provided one for you to get started
     this.x = -150;
     this.y = this.randY();
-    this.speed = this.randSpeed(100, 500);
+    this.speed = this.randSpeed(100, 400);
 
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
@@ -19,6 +19,8 @@ Enemy.prototype.update = function(dt) {
     // all computers.
     if ( this.x > 450) {
       this.x = -150;
+      this.y = this.randY();
+      this.Speed = this.randSpeed(100, 400);
     }
     this.x += this.speed * dt;
 };
@@ -64,25 +66,24 @@ Player.prototype.handleInput = function(keyCode) {
 
     } else if (keyCode === 'left') {
         this.x -= 101;
-        console.log("x " + this.x);
+
     } else if (keyCode === 'up' && this.y === -40) {
         return;
 
     } else if (keyCode === 'up') {
         this.y -= 88;
-        console.log("y " + this.y);
+
     } else if (keyCode === 'right' && this.x === 404) {
         return;
-        console.log("x "  + this.x);
+
     } else if (keyCode === 'right') {
         this.x += 101;
-        console.log("x " + this.x);
+        
     } else if (keyCode === 'down' && this.y === 400) {
         return;
 
     } else if (keyCode === 'down') {
         this.y += 88;
-        console.log("y " + this.y);
     }
 
 };
