@@ -20,7 +20,7 @@ Enemy.prototype.update = function(dt) {
     if ( this.x > 450) {
       this.x = -150;
       this.y = this.randY();
-      this.Speed = this.randSpeed(100, 400);
+      this.speed = this.randSpeed(100, 400);
     }
     this.x += this.speed * dt;
 };
@@ -47,7 +47,6 @@ Enemy.prototype.render = function() {
 const Player = function() {
   this.x = 202;
   this.y = 400;
-
   this.sprite = 'images/char-horn-girl.png';
 };
 
@@ -57,7 +56,6 @@ Player.prototype.render = function() {
 
 Player.prototype.update = function(dt) {
 };
-
 
 Player.prototype.handleInput = function(keyCode) {
 
@@ -78,15 +76,21 @@ Player.prototype.handleInput = function(keyCode) {
 
     } else if (keyCode === 'right') {
         this.x += 101;
-        
+
     } else if (keyCode === 'down' && this.y === 400) {
         return;
 
     } else if (keyCode === 'down') {
         this.y += 88;
     }
-
 };
+
+function detectCollision() {
+  if (Player.x <= Enemy.x + 50 && Player.y === Enemy.y) {
+    Player.x = 202;
+    Player.y = 400;
+  }
+}
 
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
