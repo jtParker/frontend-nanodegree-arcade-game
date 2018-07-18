@@ -2,6 +2,9 @@
 var Enemy = function() {
     // Variables applied to each of our instances go here,
     // we've provided one for you to get started
+    this.x = -150;
+    this.y = this.randY();
+    this.speed = this.randSpeed(100, 500);
 
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
@@ -14,7 +17,22 @@ Enemy.prototype.update = function(dt) {
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
     // all computers.
+    if ( this.x > 450) {
+      this.x = -150;
+    }
+    this.x += this.speed * dt;
 };
+
+// Return a random enemy movement speed.
+Enemy.prototype.randSpeed = function(min, max) {
+    return Math.random() * (max - min) + min;
+}
+
+// Return a random enemy y coordinate.
+Enemy.prototype.randY = function() {
+    this.yArr = [48, 136, 224];
+    return this.yArr[Math.floor(Math.random() * this.yArr.length)];
+}
 
 // Draw the enemy on the screen, required method for game
 Enemy.prototype.render = function() {
@@ -46,24 +64,25 @@ Player.prototype.handleInput = function(keyCode) {
 
     } else if (keyCode === 'left') {
         this.x -= 101;
-
+        console.log("x " + this.x);
     } else if (keyCode === 'up' && this.y === -40) {
         return;
 
     } else if (keyCode === 'up') {
         this.y -= 88;
-
+        console.log("y " + this.y);
     } else if (keyCode === 'right' && this.x === 404) {
         return;
-
+        console.log("x "  + this.x);
     } else if (keyCode === 'right') {
         this.x += 101;
-
+        console.log("x " + this.x);
     } else if (keyCode === 'down' && this.y === 400) {
         return;
 
     } else if (keyCode === 'down') {
         this.y += 88;
+        console.log("y " + this.y);
     }
 
 };
@@ -71,7 +90,10 @@ Player.prototype.handleInput = function(keyCode) {
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
-const allEnemies = [];
+const enemy1 = new Enemy();
+const enemy2 = new Enemy();
+const enemy3 = new Enemy();
+const allEnemies = [enemy1, enemy2, enemy3];
 const player = new Player();
 
 
