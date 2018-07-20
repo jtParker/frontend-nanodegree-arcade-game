@@ -1,14 +1,20 @@
 // Enemies our player must avoid
-var Enemy = function() {
+var Enemy = function(player) {
     // Variables applied to each of our instances go here,
     // we've provided one for you to get started
     this.x = -150;
     this.y = this.randY();
     this.speed = this.randSpeed(100, 400);
-
-    // The image/sprite for our enemies, this uses
-    // a helper we've provided to easily load images
     this.sprite = 'images/enemy-bug.png';
+    this.colRadius = 3;
+    this.detectCol = function(player) {
+      let dy = Math.round(this.x) - Math.round(player.x);
+      let dx = Math.round(this.y) - Math.round(player.y);
+      let distance = Math.sqrt(dx * dx - dy * dy);
+      if (distance < player.colRadius + this.colRadius) {
+        console.log('collision!')
+      }
+    }
 };
 
 // Update the enemy's position, required method for game
@@ -48,6 +54,7 @@ const Player = function() {
   this.x = 202;
   this.y = 400;
   this.sprite = 'images/char-horn-girl.png';
+  this.colRadius = 3;
 };
 
 Player.prototype.render = function() {
@@ -85,11 +92,10 @@ Player.prototype.handleInput = function(keyCode) {
     }
 };
 
-function detectCollision() {
-  if (Player.x <= Enemy.x + 50 && Player.y === Enemy.y) {
-    Player.x = 202;
-    Player.y = 400;
-  }
+function detectCollision(player) {
+  enemy1.detectCol(player);
+  enemy2.detectCol(player);
+  enemy3.detectCol(player);
 }
 
 // Now instantiate your objects.
