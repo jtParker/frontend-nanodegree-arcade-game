@@ -61,6 +61,8 @@ const Player = function(enemy) {
   this.width = 80;
   this.height = 60;
   this.winner = false;
+  this.currentScore = 0;
+  this.highScore = 0;
 };
 
 Player.prototype.render = function() {
@@ -112,6 +114,33 @@ Player.prototype.handleInput = function(keyCode, enemy) {
     }
 };
 
+
+const Gems = function() {
+  this.sprite = this.randGem();
+  this.placement = '';
+  this.blueGem = 'images/Gem\ Blue.png';
+  this.greenGem = 'images/Gem\ Green.png';
+  this.orangeGem = 'images/Gem\ Orange.png';
+  console.log(this.sprite);
+}
+
+// Weighted random selection for gems. Code thanks to http://codetheory.in/weighted-biased-random-number-generation-with-javascript-based-on-probability/
+Gems.prototype.randGem = function() {
+  let gemArray = [this.blueGem, this.greenGem, this.orangeGem];
+  let weights = [0.5, 0.2, 0.1];
+  let weightedArr = [];
+
+  for (let i = 0; i < weights.length; i++) {
+    let multiples = weights[i] * 100;
+
+    for (let j = 0; j < multiples; j++) {
+      weightedArr.push(gemArray[i]);
+    }
+  }
+
+  return weightedArr[Math.random() * (0 - weightedArr.length-1 + 1)];
+}
+
 function detectCollision(player) {
   enemy1.detectCol(player);
   enemy2.detectCol(player);
@@ -125,6 +154,7 @@ const enemy1 = new Enemy();
 const enemy2 = new Enemy();
 const enemy3 = new Enemy();
 const allEnemies = [enemy1, enemy2, enemy3];
+const gem = new Gems();
 const player = new Player();
 
 
