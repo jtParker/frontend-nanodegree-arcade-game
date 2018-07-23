@@ -6,15 +6,19 @@ var Enemy = function(player) {
     this.y = this.randY();
     this.speed = this.randSpeed(100, 400);
     this.sprite = 'images/enemy-bug.png';
-    this.colRadius = 3;
+    this.width = 40;
+    this.height = 60;
     this.detectCol = function(player) {
-      let dy = Math.round(this.x) - Math.round(player.x);
-      let dx = Math.round(this.y) - Math.round(player.y);
-      let distance = Math.sqrt(dx * dx - dy * dy);
-      if (distance < player.colRadius + this.colRadius) {
-        console.log('collision!')
+      let distance = player.x - this.x;
+      if(this.x < player.x + player.width &&
+        this.x + this.width > player.x &&
+        this.y < player.y + player.height &&
+        this.height + this.y > player.y) {
+        player.x = 202;
+        player.y = 400;
       }
-    }
+    };
+    console.log(this.y);
 };
 
 // Update the enemy's position, required method for game
@@ -34,13 +38,13 @@ Enemy.prototype.update = function(dt) {
 // Return a random enemy movement speed.
 Enemy.prototype.randSpeed = function(min, max) {
     return Math.random() * (max - min) + min;
-}
+};
 
 // Return a random enemy y coordinate.
 Enemy.prototype.randY = function() {
     this.yArr = [48, 136, 224];
     return this.yArr[Math.floor(Math.random() * this.yArr.length)];
-}
+};
 
 // Draw the enemy on the screen, required method for game
 Enemy.prototype.render = function() {
@@ -50,21 +54,30 @@ Enemy.prototype.render = function() {
 // Now write your own player class
 // This class requires an update(), render() and
 // a handleInput() method.
-const Player = function() {
+const Player = function(enemy) {
   this.x = 202;
   this.y = 400;
   this.sprite = 'images/char-horn-girl.png';
-  this.colRadius = 3;
+  this.width = 80;
+  this.height = 60;
 };
 
 Player.prototype.render = function() {
   ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-}
-
-Player.prototype.update = function(dt) {
 };
 
-Player.prototype.handleInput = function(keyCode) {
+Player.prototype.update = function(dt) {
+  if (player.y === -40) {
+    window.setTimeout(this.winGame(), .500);
+  }
+};
+
+Player.prototype.winGame = function() {
+  const winModal = document.querySelector('.win-modal')
+  winModal.classList.toggle('closed');
+};
+
+Player.prototype.handleInput = function(keyCode, enemy) {
 
     if (keyCode === 'left' && this.x === 0) {
         return;
@@ -73,6 +86,9 @@ Player.prototype.handleInput = function(keyCode) {
         this.x -= 101;
 
     } else if (keyCode === 'up' && this.y === -40) {
+        return;
+
+    } else if (keyCode === 'up' && this.y - enemy.y < 176 && this.x < enemy.x + 50 || this.x < enemy.x - 50) {
         return;
 
     } else if (keyCode === 'up') {
@@ -96,7 +112,7 @@ function detectCollision(player) {
   enemy1.detectCol(player);
   enemy2.detectCol(player);
   enemy3.detectCol(player);
-}
+};
 
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
@@ -118,5 +134,5 @@ document.addEventListener('keyup', function(e) {
         40: 'down'
     };
 
-    player.handleInput(allowedKeys[e.keyCode]);
+    player.handleInput(allowedKeys[e.keyCode], Enemy);
 });
