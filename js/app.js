@@ -76,7 +76,7 @@ Player.prototype.update = function(dt) {
 Player.prototype.winGame = function() {
   this.winner = true;
   const winModal = document.querySelector('.win-modal');
-  const winContent = document.querySelector('win-modal-conent');
+  const winContent = document.querySelector('.win-modal-content');
   winModal.classList.toggle('closed');
   winContent.classList.toggle('closed');
 };
