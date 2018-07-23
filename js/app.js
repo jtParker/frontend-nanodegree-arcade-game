@@ -60,6 +60,7 @@ const Player = function(enemy) {
   this.sprite = 'images/char-horn-girl.png';
   this.width = 80;
   this.height = 60;
+  this.winner = false;
 };
 
 Player.prototype.render = function() {
@@ -73,8 +74,11 @@ Player.prototype.update = function(dt) {
 };
 
 Player.prototype.winGame = function() {
-  const winModal = document.querySelector('.win-modal')
+  this.winner = true;
+  const winModal = document.querySelector('.win-modal');
+  const winContent = document.querySelector('win-modal-conent');
   winModal.classList.toggle('closed');
+  winContent.classList.toggle('closed');
 };
 
 Player.prototype.handleInput = function(keyCode, enemy) {
