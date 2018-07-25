@@ -1,7 +1,8 @@
-// Enemies our player must avoid
+/*
+    Enemy Object
+*/
+
 var Enemy = function(player) {
-    // Variables applied to each of our instances go here,
-    // we've provided one for you to get started
     this.x = -150;
     this.y = this.randY();
     this.speed = this.randSpeed(100, 400);
@@ -13,9 +14,6 @@ var Enemy = function(player) {
 // Update the enemy's position, required method for game
 // Parameter: dt, a time delta between ticks
 Enemy.prototype.update = function(dt) {
-    // You should multiply any movement by the dt parameter
-    // which will ensure the game runs at the same speed for
-    // all computers.
     if ( this.x > 450) {
       this.x = -150;
       this.y = this.randY();
@@ -35,6 +33,7 @@ Enemy.prototype.randY = function() {
     return this.yArr[Math.floor(Math.random() * this.yArr.length)];
 };
 
+// Detect a collision between the player and enemy
 Enemy.prototype.detectCol = function(player) {
   let distance = player.x - this.x;
   if(this.x < player.x + player.width &&
@@ -43,7 +42,8 @@ Enemy.prototype.detectCol = function(player) {
     this.height + this.y > player.y) {
     player.x = 202;
     player.y = 400;
-    player.score = 0;
+    player.currentScore = 0;
+    player.score.innerHTML = 0;
   }
 };
 
@@ -52,38 +52,56 @@ Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
-// Now write your own player class
-// This class requires an update(), render() and
-// a handleInput() method.
+/*
+    Player Object
+*/
+
 const Player = function(enemy) {
   this.x = 202;
   this.y = 400;
-  this.sprite = 'images/char-horn-girl.png';
+  this.sprite = 'images/char-boy.png';
   this.width = 80;
   this.height = 60;
   this.winner = false;
   this.currentScore = 0;
   this.highScore = 0;
+  this.totalScore = 0;
+  this.score = document.getElementById('score');
+  this.modalScoreboard = document.getElementById('modal-score');
+  this.highScoreboard = document.getElementById('high-score');
+  this.modalHighScore = document.getElementById('modal-high-score');
+  this.totalScoreboard = document.getElementById('total-score');
+  this.modalTotalScore = document.getElementById('modal-total-score');
 };
 
-Player.prototype.render = function() {
-  ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-};
-
+// Updates player object
 Player.prototype.update = function(dt) {
   if (player.y === -40) {
-    window.setTimeout(this.winGame(), .500);
+    window.setTimeout(this.winGame(), 1000);
   }
 };
 
+// Fires when player wins reaches the water blocks
 Player.prototype.winGame = function() {
   const winModal = document.querySelector('.win-modal');
   const winContent = document.querySelector('.win-modal-content');
+
+  if (this.score > this.highScore) {
+    this.highscore = this.score;
+  }
+
   this.winner = true;
+  this.modalScore.innerHTML = this.currentScore;
+  this.modalHighScore.innerHTML = this.highScore;
+  this.totalScore += this.score;
+  this.modalTotalScore.innerHTML = this.totalScore;
+
   winModal.classList.toggle('closed');
   winContent.classList.toggle('closed');
+
 };
 
+// Input handling for player
 Player.prototype.handleInput = function(keyCode, enemy) {
 
     if (keyCode === 'left' && this.x === 0) {
@@ -115,12 +133,20 @@ Player.prototype.handleInput = function(keyCode, enemy) {
     }
 };
 
+// Draws the player on the screen
+Player.prototype.render = function() {
+  ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+};
+
+/*
+  Gem Object
+*/
 
 const Gems = function() {
   this.xArr = [20, 121, 222, 323, 424];
-  this.yArr = [440, 352, 264, 176];
+  this.yArr = [352, 264, 176];
   this.x = this.xArr[randInt(0,4)];
-  this.y = this.yArr[randInt(0, 3)];
+  this.y = this.yArr[randInt(0,2)];
   this.blueGem = 'images/Gem-Blue.png';
   this.greenGem = 'images/Gem-Green.png';
   this.orangeGem = 'images/Gem-Orange.png';
@@ -148,8 +174,6 @@ Gems.prototype.randGem = function() {
 
 Gems.prototype.detectCol = function(player) {
   let distance = player.x - this.x;
-  let score = document.getElementById('score');
-  let modalScore = document.getElementById('modal-score');
 
   if(this.x < player.x + player.width &&
     this.x + this.width > player.x &&
@@ -158,30 +182,28 @@ Gems.prototype.detectCol = function(player) {
 
       if (this.sprite === this.blueGem) {
         player.currentScore += 5;
-        score.innerHTML= player.currentScore;
-        modalScore.innerHTML= player.currentScore;
+        player.score.innerHTML = player.currentScore;
 
       } else if (this.sprite === this.greenGem) {
         player.currentScore += 10;
-        score.innerHTML= player.currentScore;
-        modalScore.innerHTML= player.currentScore;
+        player.score.innerHTML = player.currentScore;
 
       } else if (this.sprite === this.orangeGem) {
         player.currentScore += 20;
-        score.innerHTML= player.currentScore;
-        modalScore.innerHTML= player.currentScore;
+        player.score.innerHTML = player.currentScore;
       }
       this.sprite = this.randGem();
       this.x = this.xArr[randInt(0,4)];
-      this.y = this.yArr[randInt(0, 3)];
-      console.log(player.currentScore);
+      this.y = this.yArr[randInt(0,2)];
   }
 };
 
+// Draw gems on the screen
 Gems.prototype.render = function() {
   ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
+// Function to call all collision functions
 function detectCollision(player) {
   enemy1.detectCol(player);
   enemy2.detectCol(player);
@@ -189,6 +211,8 @@ function detectCollision(player) {
   gem.detectCol(player);
 };
 
+
+// Returns random integer
 function randInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1));
 }
