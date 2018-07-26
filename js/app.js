@@ -1,32 +1,19 @@
-// Enemies our player must avoid
+/*
+    Enemy Object
+*/
+
 var Enemy = function(player) {
-    // Variables applied to each of our instances go here,
-    // we've provided one for you to get started
     this.x = -150;
     this.y = this.randY();
     this.speed = this.randSpeed(100, 400);
     this.sprite = 'images/enemy-bug.png';
     this.width = 40;
     this.height = 60;
-    this.detectCol = function(player) {
-      let distance = player.x - this.x;
-      if(this.x < player.x + player.width &&
-        this.x + this.width > player.x &&
-        this.y < player.y + player.height &&
-        this.height + this.y > player.y) {
-        player.x = 202;
-        player.y = 400;
-      }
-    };
-    console.log(this.y);
 };
 
 // Update the enemy's position, required method for game
 // Parameter: dt, a time delta between ticks
 Enemy.prototype.update = function(dt) {
-    // You should multiply any movement by the dt parameter
-    // which will ensure the game runs at the same speed for
-    // all computers.
     if ( this.x > 450) {
       this.x = -150;
       this.y = this.randY();
@@ -46,43 +33,86 @@ Enemy.prototype.randY = function() {
     return this.yArr[Math.floor(Math.random() * this.yArr.length)];
 };
 
+// Detect a collision between the player and enemy
+Enemy.prototype.detectCol = function(player) {
+  let distance = player.x - this.x;
+  if(this.x < player.x + player.width &&
+    this.x + this.width > player.x &&
+    this.y < player.y + player.height &&
+    this.height + this.y > player.y) {
+    player.x = 202;
+    player.y = 400;
+    player.currentScore = 0;
+    player.score.innerHTML = 0;
+  }
+};
+
 // Draw the enemy on the screen, required method for game
 Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
-// Now write your own player class
-// This class requires an update(), render() and
-// a handleInput() method.
+/*
+    Player Object
+*/
+
 const Player = function(enemy) {
   this.x = 202;
   this.y = 400;
-  this.sprite = 'images/char-horn-girl.png';
+  this.sprite = 'images/char-boy.png';
   this.width = 80;
   this.height = 60;
   this.winner = false;
   this.currentScore = 0;
   this.highScore = 0;
+  this.totalScore = 0;
+  this.score = document.getElementById('score');
+  this.modalScoreboard = document.getElementById('modal-score');
+  this.highScoreboard = document.getElementById('high-score');
+  this.modalHighScore = document.getElementById('modal-high-score');
+  this.totalScoreboard = document.getElementById('total-score');
+  this.modalTotalScore = document.getElementById('modal-total-score');
 };
 
-Player.prototype.render = function() {
-  ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-};
-
+// Updates player object
 Player.prototype.update = function(dt) {
   if (player.y === -40) {
-    window.setTimeout(this.winGame(), .500);
+    window.setTimeout(this.winGame(), 1000);
   }
 };
 
+const winModal = document.querySelector('.win-modal');
+const winContent = document.querySelector('.win-modal-content');
+
+// Fires when player wins reaches the water blocks
 Player.prototype.winGame = function() {
+
+  if (this.currentScore > this.highScore) {
+    this.highScore = this.currentScore;
+  }
+
   this.winner = true;
-  const winModal = document.querySelector('.win-modal');
-  const winContent = document.querySelector('.win-modal-content');
+  this.modalScoreboard.innerHTML = this.currentScore;
+  this.modalHighScore.innerHTML = this.highScore;
+  this.totalScore += this.currentScore;
+  this.modalTotalScore.innerHTML = this.totalScore;
+
   winModal.classList.toggle('closed');
   winContent.classList.toggle('closed');
+
 };
 
+Player.prototype.playAgain = function() {
+    this.winner = false;
+    this.x = 202;
+    this.y = 400;
+    this.currentScore = 0;
+    this.modalScoreboard = 0;
+    winModal.classList.toggle('closed');
+    winContent.classList.toggle('closed');
+};
+
+// Input handling for player
 Player.prototype.handleInput = function(keyCode, enemy) {
 
     if (keyCode === 'left' && this.x === 0) {
@@ -114,49 +144,97 @@ Player.prototype.handleInput = function(keyCode, enemy) {
     }
 };
 
+// Draws the player on the screen
+Player.prototype.render = function() {
+  ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+};
+
+/*
+  Gem Object
+*/
 
 const Gems = function() {
+  this.xArr = [20, 121, 222, 323, 424];
+  this.yArr = [352, 264, 176];
+  this.x = this.xArr[randInt(0,4)];
+  this.y = this.yArr[randInt(0,2)];
+  this.blueGem = 'images/Gem-Blue.png';
+  this.greenGem = 'images/Gem-Green.png';
+  this.orangeGem = 'images/Gem-Orange.png';
+  this.gemArray = [this.blueGem, this.greenGem, this.orangeGem];
+  this.width = 40;
+  this.height = 30;
+  this.weights = [0.5, 0.3, 0.1];
+  this.weightedArr = [];
   this.sprite = this.randGem();
-  this.placement = '';
-  this.blueGem = 'images/Gem\ Blue.png';
-  this.greenGem = 'images/Gem\ Green.png';
-  this.orangeGem = 'images/Gem\ Orange.png';
-  console.log(this.sprite);
 }
 
 // Weighted random selection for gems. Code thanks to http://codetheory.in/weighted-biased-random-number-generation-with-javascript-based-on-probability/
 Gems.prototype.randGem = function() {
-  let gemArray = [this.blueGem, this.greenGem, this.orangeGem];
-  let weights = [0.5, 0.2, 0.1];
-  let weightedArr = [];
-
-  for (let i = 0; i < weights.length; i++) {
-    let multiples = weights[i] * 100;
+  let randIndex;
+  for (let i = 0; i < this.weights.length; i++) {
+    let multiples = this.weights[i] * 100;
 
     for (let j = 0; j < multiples; j++) {
-      weightedArr.push(gemArray[i]);
-      console.log(weightedArr);
+      this.weightedArr.push(this.gemArray[i]);
     }
   }
-
-  return weightedArr[Math.random() * (0 - weightedArr.length-1 + 1)];
+  randIndex = randInt(0, this.weightedArr.length-1);
+  return this.weightedArr[randIndex];
 }
 
+Gems.prototype.detectCol = function(player) {
+  let distance = player.x - this.x;
+
+  if(this.x < player.x + player.width &&
+    this.x + this.width > player.x &&
+    this.y < player.y + player.height &&
+    this.height + this.y > player.y) {
+
+      if (this.sprite === this.blueGem) {
+        player.currentScore += 5;
+        player.score.innerHTML = player.currentScore;
+
+      } else if (this.sprite === this.greenGem) {
+        player.currentScore += 10;
+        player.score.innerHTML = player.currentScore;
+
+      } else if (this.sprite === this.orangeGem) {
+        player.currentScore += 20;
+        player.score.innerHTML = player.currentScore;
+      }
+      this.sprite = this.randGem();
+      this.x = this.xArr[randInt(0,4)];
+      this.y = this.yArr[randInt(0,2)];
+  }
+};
+
+// Draw gems on the screen
+Gems.prototype.render = function() {
+  ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+};
+
+// Function to call all collision functions
 function detectCollision(player) {
   enemy1.detectCol(player);
   enemy2.detectCol(player);
   enemy3.detectCol(player);
+  gem.detectCol(player);
 };
 
-// Now instantiate your objects.
-// Place all enemy objects in an array called allEnemies
-// Place the player object in a variable called player
+
+// Returns random integer
+function randInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1));
+}
+
+// Instantiating objects
 const enemy1 = new Enemy();
 const enemy2 = new Enemy();
 const enemy3 = new Enemy();
 const allEnemies = [enemy1, enemy2, enemy3];
-const gem = new Gems();
 const player = new Player();
+const gem = new Gems();
 
 
 // This listens for key presses and sends the keys to your
@@ -170,4 +248,11 @@ document.addEventListener('keyup', function(e) {
     };
 
     player.handleInput(allowedKeys[e.keyCode], Enemy);
+});
+
+document.addEventListener('click', function(e) {
+  let replayBtn = document.getElementById('replay-btn')
+  if (e.target === replayBtn) {
+    player.playAgain();
+  }
 });

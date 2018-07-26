@@ -3,9 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <title>Effective JavaScript: Frogger</title>
+    <link href="https://fonts.googleapis.com/css?family=Kirang+Haerang" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+  <div class="scoreboard">
+    <div class="score-container">
+      <h2>Score: <span id="score">0</span></h2>
+    </div>
+    <div class="high-score-container">
+      <h2>High Score: <span id="high-score">0</span></h2>
+    </div>
+    <div class="total-score-container">
+      <h2>Total Score: <span id="total-score">0</span></h2>
+    </div>
+  </div>
+
   <div class="start-modal closed">
     <div class="start-modal-content closed">
 
@@ -13,11 +26,20 @@
   </div>
   <div class="win-modal closed">
     <div class="win-modal-content closed">
-      <h2>You Win!</h2>
-      <h3>Score</h3>
-      <span id="score"></span>
-      <h3>High Score</h3>
-      <span id="high-score"></span>
+      <h1>You win!</h1>
+      <div class="scoreboard">
+        <div class="score-container">
+          <h2>Score: <span id="modal-score">0</span></h2>
+        </div>
+        <div class="high-score-container">
+          <h2>High Score: <span id="modal-high-score">0</span></h2>
+        </div>
+        <div class="total-score-container">
+          <h2>Total Score: <span id="modal-total-score">0</span></h2>
+        </div>
+      </div>
+      <p>Keep playing to unlock new characters!</p>
+      <button type="button" name="play-again" id="replay-btn">Play Again!</button>
     </div>
   </div>
 
