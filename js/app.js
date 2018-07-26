@@ -81,19 +81,20 @@ Player.prototype.update = function(dt) {
   }
 };
 
+const winModal = document.querySelector('.win-modal');
+const winContent = document.querySelector('.win-modal-content');
+
 // Fires when player wins reaches the water blocks
 Player.prototype.winGame = function() {
-  const winModal = document.querySelector('.win-modal');
-  const winContent = document.querySelector('.win-modal-content');
 
-  if (this.score > this.highScore) {
-    this.highscore = this.score;
+  if (this.currentScore > this.highScore) {
+    this.highScore = this.currentScore;
   }
 
   this.winner = true;
-  this.modalScore.innerHTML = this.currentScore;
+  this.modalScoreboard.innerHTML = this.currentScore;
   this.modalHighScore.innerHTML = this.highScore;
-  this.totalScore += this.score;
+  this.totalScore += this.currentScore;
   this.modalTotalScore.innerHTML = this.totalScore;
 
   winModal.classList.toggle('closed');
@@ -238,3 +239,18 @@ document.addEventListener('keyup', function(e) {
 
     player.handleInput(allowedKeys[e.keyCode], Enemy);
 });
+
+document.getElementById('replay-btn').onclick = playAgain(player);
+
+var newGame = false;
+
+function playAgain(player) {
+    player.winner = false;
+    newGame = true;
+    player.x = 202;
+    player.y = 400;
+    player.currentScore = 0;
+    player.modalScoreboard = 0;
+    winModal.classList.toggle('closed');
+    winContent.classList.toggle('closed');
+}
