@@ -135,6 +135,7 @@ Gems.prototype.randGem = function() {
 
     for (let j = 0; j < multiples; j++) {
       weightedArr.push(gemArray[i]);
+      console.log(weightedArr);
     }
   }
 
