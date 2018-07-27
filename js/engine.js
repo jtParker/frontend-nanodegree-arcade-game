@@ -55,8 +55,11 @@ var Engine = (function(global) {
         /* Use the browser's requestAnimationFrame function to call this
          * function again as soon as the browser is able to draw another frame.
          */
-        if (player.winner) return;
+        if (player.winner) {
+          return;
+        } else {
         win.requestAnimationFrame(main);
+      }
     }
 
     /* This function does some initial setup that should only occur once,
@@ -165,7 +168,11 @@ var Engine = (function(global) {
     function reset() {
         // noop
         // TODO: finish function
-        // if (player.winner === '')
+        if (player.replay === 'true') {
+          player.x = 202;
+          player.y = 400;
+          player.render();
+        }
     }
 
     /* Go ahead and load all of the images we know we're going to need to

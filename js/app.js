@@ -63,6 +63,7 @@ const Player = function(enemy) {
   this.width = 80;
   this.height = 60;
   this.winner = false;
+  this.replay = false;
   this.currentScore = 0;
   this.highScore = 0;
   this.totalScore = 0;
@@ -104,8 +105,7 @@ Player.prototype.winGame = function() {
 
 Player.prototype.playAgain = function() {
     this.winner = false;
-    this.x = 202;
-    this.y = 400;
+    this.playAgain = true;
     this.currentScore = 0;
     this.modalScoreboard = 0;
     winModal.classList.toggle('closed');
