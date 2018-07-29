@@ -105,11 +105,15 @@ Player.prototype.winGame = function() {
 
 Player.prototype.playAgain = function() {
     this.winner = false;
-    this.playAgain = true;
+    this.replay = true;
+    this.score = 0;
     this.currentScore = 0;
     this.modalScoreboard = 0;
+    this.x = 202;
+    this.y = 400;
     winModal.classList.toggle('closed');
     winContent.classList.toggle('closed');
+    main();
 };
 
 // Input handling for player
@@ -240,6 +244,7 @@ const gem = new Gems();
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
 document.addEventListener('keyup', function(e) {
+    e.preventDefault();
     var allowedKeys = {
         37: 'left',
         38: 'up',
