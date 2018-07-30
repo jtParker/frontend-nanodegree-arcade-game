@@ -22,7 +22,7 @@ You must make it to the water to keep the gems you have collected. Each successf
 
 ### Controls
 
-Up: W / Up arrow
-Down: S / Down arrow
-Left: A / Left arrow
-Right: D / Right arrow
+* Up: W / Up arrow
+* Down: S / Down arrow
+* Left: A / Left arrow
+* Right: D / Right arrow
