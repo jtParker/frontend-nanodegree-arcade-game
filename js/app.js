@@ -36,14 +36,13 @@ Enemy.prototype.randY = function() {
 // Detect a collision between the player and enemy
 Enemy.prototype.detectCol = function(player) {
   let distance = player.x - this.x;
+
   if(this.x < player.x + player.width &&
     this.x + this.width > player.x &&
     this.y < player.y + player.height &&
     this.height + this.y > player.y) {
-    player.x = 202;
-    player.y = 400;
-    player.currentScore = 0;
-    player.score.innerHTML = 0;
+
+    window.setTimeout(player.restart(), 5000);
   }
 };
 
@@ -67,7 +66,7 @@ const Player = function(enemy) {
   this.currentScore = 0;
   this.highScore = 0;
   this.totalScore = 0;
-  this.score = document.getElementById('score');
+  this.scoreBoard = document.getElementById('score');
   this.modalScoreboard = document.getElementById('modal-score');
   this.highScoreboard = document.getElementById('high-score');
   this.modalHighScore = document.getElementById('modal-high-score');
@@ -97,23 +96,57 @@ Player.prototype.winGame = function() {
   this.modalHighScore.innerHTML = this.highScore;
   this.totalScore += this.currentScore;
   this.modalTotalScore.innerHTML = this.totalScore;
+  this.charUnlock();
 
   winModal.classList.toggle('closed');
   winContent.classList.toggle('closed');
 
 };
 
+Player.prototype.restart = function() {
+  this.x = 202;
+  this.y = 400;
+  this.currentScore = 0;
+  this.scoreBoard.innerHTML = player.currentScore;
+}
+
+// Method to restart game after winning
 Player.prototype.playAgain = function() {
-    this.winner = false;
-    this.replay = true;
-    this.score = 0;
-    this.currentScore = 0;
-    this.modalScoreboard = 0;
-    this.x = 202;
-    this.y = 400;
-    winModal.classList.toggle('closed');
-    winContent.classList.toggle('closed');
-    main();
+  this.winner = false;
+  this.replay = true;
+  this.scoreBoard.innerHTML = 0;
+  this.currentScore = 0;
+  this.modalScoreboard.innerHTML = 0;
+  this.highScoreboard.innerHTML = this.highScore;
+  this.totalScoreboard.innerHTML = this.totalScore;
+  this.x = 202;
+  this.y = 400;
+  winModal.classList.toggle('closed');
+  winContent.classList.toggle('closed');
+  main();
+};
+
+// Unlock characters after earning points
+Player.prototype.charUnlock = function() {
+  this.boy = document.getElementById('boy');
+  this.catGirl = document.getElementById('cat-girl');
+  this.hornGirl = document.getElementById('horn-girl');
+  this.pinkGirl = document.getElementById('pink-girl');
+  this.princess = document.getElementById('princess');
+
+  if (player.totalScore >= 400) {
+    this.pinkGirl.classList.remove('closed');
+
+  } else if (player.totalScore >= 300) {
+    this.hornGirl.classList.remove('closed');
+
+  } else if (player.totalScore >= 200) {
+    this.catGirl.classList.remove('closed');
+  }
+
+  if (player.highScore >= 300) {
+    this.princess.classList.remove('closed');
+  }
 };
 
 // Input handling for player
@@ -197,15 +230,15 @@ Gems.prototype.detectCol = function(player) {
 
       if (this.sprite === this.blueGem) {
         player.currentScore += 5;
-        player.score.innerHTML = player.currentScore;
+        player.scoreBoard.innerHTML = player.currentScore;
 
       } else if (this.sprite === this.greenGem) {
         player.currentScore += 10;
-        player.score.innerHTML = player.currentScore;
+        player.scoreBoard.innerHTML = player.currentScore;
 
       } else if (this.sprite === this.orangeGem) {
         player.currentScore += 20;
-        player.score.innerHTML = player.currentScore;
+        player.scoreBoard.innerHTML = player.currentScore;
       }
       this.sprite = this.randGem();
       this.x = this.xArr[randInt(0,4)];
@@ -242,22 +275,45 @@ const gem = new Gems();
 
 
 // This listens for key presses and sends the keys to your
-// Player.handleInput() method. You don't need to modify this.
+// Player.handleInput() method. 
 document.addEventListener('keyup', function(e) {
-    e.preventDefault();
     var allowedKeys = {
         37: 'left',
         38: 'up',
         39: 'right',
         40: 'down'
     };
+    e.preventDefault();
 
     player.handleInput(allowedKeys[e.keyCode], Enemy);
 });
 
+// Listen for clicks
 document.addEventListener('click', function(e) {
   let replayBtn = document.getElementById('replay-btn')
+
   if (e.target === replayBtn) {
     player.playAgain();
+
+  } else if (e.target === player.boy) {
+    player.sprite = 'images/char-boy.png';
+    player.playAgain();
+
+  } else if (e.target === player.catGirl) {
+    player.sprite = 'images/char-cat-girl.png';
+    player.playAgain();
+
+  } else if (e.target === player.hornGirl) {
+    player.sprite = 'images/char-horn-girl.png';
+    player.playAgain();
+
+  } else if (e.target === player.pinkGirl) {
+    player.sprite = 'images/char-pink-girl.png';
+    player.playAgain();
+
+  } else if (e.target === player.princess) {
+    player.sprite = 'images/char-princess-girl.png';
+    player.playAgain();
+
   }
 });

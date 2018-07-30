@@ -5,10 +5,26 @@ body {
 
 h1  {
   font-size: 50px;
+  margin-bottom: 10px;
 }
 
 p {
   font-size: 25px;
+}
+
+#replay-btn {
+  font-family: 'Kirang Haerang', cursive;
+  font-size: 30px;
+  height: 60px;
+  width: 200px;
+  border-radius: 5px;
+  background-color: #5cff49;
+  transition: all .2s ease-in-out;
+}
+
+#replay-btn:hover {
+  transform: scale(1.1);
+  cursor: pointer;
 }
 
 .scoreboard {
@@ -17,12 +33,7 @@ p {
 }
 
 .scoreboard > div {
-  margin: 20px 20px 5px 20px;
-}
-
-
-.start-modal {
-
+  margin: 10px 20px 5px 20px;
 }
 
 .win-modal {
@@ -43,12 +54,28 @@ p {
   background-color: #fff;
   width: 600px;
   max-width: 100%;
-  height: 400px;
+  height: 600px;
   max-height: 100%;
   border-radius: 10px;
   z-index: 100;
 }
 
+.player-select {
+  display: flex;
+  justify-content: center;
+}
+
+.char {
+  margin-top: -30px;
+  transition: all .2s ease-in-out;
+}
+
+.char:hover {
+  transform: scale(1.1);
+  cursor: pointer;
+}
+
+
 .closed {
-  visibility: hidden;
+  display: none;
 }
