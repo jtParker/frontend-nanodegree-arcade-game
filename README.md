@@ -19,3 +19,10 @@ You must make it to the water to keep the gems you have collected. Each successf
 *  Total score: 300
 *  Total score: 400
 *  Score 300 points in one round
+
+### Controls
+
+Up: W / Up arrow
+Down: S / Down arrow
+Left: A / Left arrow
+Right: D / Right arrow
