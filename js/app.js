@@ -7,7 +7,7 @@ var Enemy = function(player) {
     this.y = this.randY();
     this.speed = this.randSpeed(100, 400);
     this.sprite = 'images/enemy-bug.png';
-    this.width = 40;
+    this.width = 30;
     this.height = 60;
 };
 
@@ -77,7 +77,7 @@ const Player = function(enemy) {
 // Updates player object
 Player.prototype.update = function(dt) {
   if (player.y === -40) {
-    window.setTimeout(this.winGame(), 1000);
+    window.setTimeout(this.winGame(), 5000);
   }
 };
 
@@ -136,9 +136,12 @@ Player.prototype.charUnlock = function() {
 
   if (player.totalScore >= 400) {
     this.pinkGirl.classList.remove('closed');
+    this.hornGirl.classList.remove('closed');
+    this.catGirl.classList.remove('closed');
 
   } else if (player.totalScore >= 300) {
     this.hornGirl.classList.remove('closed');
+    this.catGirl.classList.remove('closed');
 
   } else if (player.totalScore >= 200) {
     this.catGirl.classList.remove('closed');
@@ -275,7 +278,7 @@ const gem = new Gems();
 
 
 // This listens for key presses and sends the keys to your
-// Player.handleInput() method. 
+// Player.handleInput() method.
 document.addEventListener('keyup', function(e) {
     var allowedKeys = {
         37: 'left',
