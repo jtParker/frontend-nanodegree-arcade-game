@@ -1,3 +1,4 @@
+'use strict';
 /*
     Enemy Object
 */
@@ -108,7 +109,7 @@ Player.prototype.restart = function() {
   this.y = 400;
   this.currentScore = 0;
   this.scoreBoard.innerHTML = player.currentScore;
-}
+};
 
 // Method to restart game after winning
 Player.prototype.playAgain = function() {
@@ -134,20 +135,20 @@ Player.prototype.charUnlock = function() {
   this.pinkGirl = document.getElementById('pink-girl');
   this.princess = document.getElementById('princess');
 
-  if (player.totalScore >= 400) {
+  if (this.totalScore >= 400) {
     this.pinkGirl.classList.remove('closed');
     this.hornGirl.classList.remove('closed');
     this.catGirl.classList.remove('closed');
 
-  } else if (player.totalScore >= 300) {
+  } else if (this.totalScore >= 300) {
     this.hornGirl.classList.remove('closed');
     this.catGirl.classList.remove('closed');
 
-  } else if (player.totalScore >= 200) {
+  } else if (this.totalScore >= 200) {
     this.catGirl.classList.remove('closed');
   }
 
-  if (player.highScore >= 300) {
+  if (this.highScore >= 300) {
     this.princess.classList.remove('closed');
   }
 };
@@ -207,7 +208,7 @@ const Gems = function() {
   this.weights = [0.5, 0.3, 0.1];
   this.weightedArr = [];
   this.sprite = this.randGem();
-}
+};
 
 // Weighted random selection for gems. Code thanks to http://codetheory.in/weighted-biased-random-number-generation-with-javascript-based-on-probability/
 Gems.prototype.randGem = function() {
@@ -221,7 +222,7 @@ Gems.prototype.randGem = function() {
   }
   randIndex = randInt(0, this.weightedArr.length-1);
   return this.weightedArr[randIndex];
-}
+};
 
 Gems.prototype.detectCol = function(player) {
   let distance = player.x - this.x;
@@ -260,7 +261,7 @@ function detectCollision(player) {
   enemy2.detectCol(player);
   enemy3.detectCol(player);
   gem.detectCol(player);
-};
+}
 
 
 // Returns random integer
@@ -297,7 +298,7 @@ document.addEventListener('keyup', function(e) {
 
 // Listen for clicks
 document.addEventListener('click', function(e) {
-  let replayBtn = document.getElementById('replay-btn')
+  let replayBtn = document.getElementById('replay-btn');
 
   if (e.target === replayBtn) {
     player.playAgain();
